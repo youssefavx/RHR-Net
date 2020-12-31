@@ -12,6 +12,15 @@
 #   'Random orthogonal matrix' ... is there some parameter I need to set with this, how is this implemented?
 #6. Making GRU Layers Bi-directional 
 
+#Evaluation metrics (would those go as sort of custom functions where metrics=['accuracy'] is in Keras's model.compile? (as seen below):
+#1. Segmental signal-to-noise ratio (SSNR)  
+#2. Perceptual evaluation of speech quality (PESQ) 
+#3. Short-time objective intelligibility (STOI)
+#4. Three subjective mean opinion scores (MOSs)
+
+#Dataset: https://datashare.is.ed.ac.uk/handle/10283/2791
+
+
 #All questions so far:
 
 #GRU
@@ -45,7 +54,7 @@ model.add(gru_layer_5)
 model.add(gru_layer_6) 
 model.add(gru_layer_7)
 
-#model.compile(loss='logcosh', optimizer='RMSprop', metrics=['accuracy']) #Something like this? Not sure if this is how they set it up and if metrics was set to 'accuracy'
+model.compile(loss='logcosh', optimizer='RMSprop', metrics=['accuracy']) #Something like this? Not sure if this is how they set it up and if metrics was set to 'accuracy'
 
 #Wav file:
 #How does the model take in data? Does a WAV file have to be reformatted to something?
