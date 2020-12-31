@@ -62,7 +62,7 @@ model.compile(loss='logcosh', optimizer='RMSprop', metrics=['accuracy']) #Someth
 from scipy.io import wavfile
 import scipy.io
 
-audio = wavfile.read(filename)
+audio = wavfile.read('file.wav')
 samplerate = audio[0]
 data = audio[1]
 #Get the first 100 samples:
