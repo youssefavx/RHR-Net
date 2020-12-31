@@ -2,7 +2,7 @@
 
 #What is left to implement?
 #1. Learning rate: starting at 10^-4 (0.0001) and gradually decreasing to 10^-8 (0.00000001) during training. Is that done through a kind of 'learning rate schduling' on Keras?
-#2. Activation function: PReLU (but it isn't clear if this is applied for only certain layers with residual connections, or for all layers)
+#2. Activation function: PReLU (but it isn't clear if this is applied for only certain layers with residual connections, or for all layers), from the diagram it seems to be added on at the end. Implementation in Keras: https://stackoverflow.com/a/34721948 - This blog talks about a time based learning rate schedule built in keras: https://machinelearningmastery.com/using-learning-rate-schedules-deep-learning-models-python-keras/
 #3. Residual connections between certain layers
 #4. Initializer: Xavier normal initializer ( "We use the Xavier normal initializer [34] for the kernel weights, with zero-initialized biases." Is this it: https://keras.io/api/layers/initializers/#glorotnormal-class ?) - Zero-initalizaed biases? Kernel weights? Is that different to weights?)
 #   Maybe you can do this with something like: keras.layers.GRU(2, kernel_initializer='glorot_normal', bias_initializer='zeros') #BUT... is it applied to all layers? (I'm assuming yes)
