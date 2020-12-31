@@ -1,11 +1,35 @@
 #Rough sketch - work in progress
 
+#What is left to implement?
+#1. Learning rate: starting at 10^-4 and gradually decreasing to 10^-8 during training. Is that done through a kind of 'learning rate schduling' on Keras?
+#2. Activation function: PReLU (but it isn't clear if this is applied for only certain layers with residual connections, or for all layers)
+#3. Residual connections between certain layers
+#4. Initializer: Xavier normal initializer ( "We use the Xavier normal initializer [34] for the kernel weights, with zero-initialized biases." Is this it: https://keras.io/api/layers/initializers/#glorotnormal-class ?) - Zero-initalizaed biases? Kernel weights? Is that different to weights?)
+#   Maybe you can do this with something like: keras.layers.GRU(2, kernel_initializer='glorot_normal', bias_initializer='zeros') #BUT... is it applied to all layers? (I'm assuming yes)
+#5. Initializer of recurrent states: "The initializer for the recurrent states is a random orthogonal matrix [35], which helps the RNN stabilize by avoiding vanishing or exploding gradients. The stability occurs because the orthogonal matrix has an absolute eigenvalue of one, which avoids the gradients from exploding or vanishing due to repeated matrix multiplication." ... huh? Is this something I have to set on Keras? (random orthogonal matrix?)
+#   Key terms:
+#   'Recurrent state' what does that refer to, the GRU units?
+#   'Random orthogonal matrix' ... is there some parameter I need to set with this, how is this implemented?
+#6. Making GRU Layers Bi-directional 
+
+#All questions so far:
+
+#GRU
+#1. How do you make Bi-directional GRU Layers?
+#2. Do I have my GRU layer parameters set up correctly, is this right for ALL layers: keras.layers.GRU(2, kernel_initializer='glorot_normal', bias_initializer='zeros') 
+
+#Data
+#1. How do you input data, raw samples? If so, how? Meaning in the first layer, or during training
+#2. Is the data coming in only going to be noisy audio through the first layer? How do you input 2 streams, noisy and clean?
+#3. If I want to switch to 22kHz, or 44.1kHz, do the GRU layer units need to change in size relative to that?
+#
+
 from tensorflow import keras 
 import keras 
 model = Sequential() #Is "Sequential" even right? Do I have to specify it's some kind of bi-directional RNN?
 
 #First 6 GRU Layers are currently NOT bidirectional which they have in their paper
-gru_layer_1 = keras.layers.GRU(2) #Is there some parameter to specify timesteps...whatever those are?
+gru_layer_1 = keras.layers.GRU(2) #I assume timesteps == samples in this case? 
 gru_layer_2 = keras.layers.GRU(128) 
 gru_layer_3 = keras.layers.GRU(256) 
 gru_layer_4 = keras.layers.GRU(512) 
