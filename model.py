@@ -35,27 +35,89 @@
 
 from tensorflow import keras 
 import keras 
+from keras import Sequential
+from keras.layers import Bidirectional, GRU
+from keras.initializers import Orthogonal
+
 model = Sequential() #Is "Sequential" even right? Do I have to specify it's some kind of bi-directional RNN?
 
-#First 6 GRU Layers are currently NOT bidirectional which they have in their paper
-gru_layer_1 = keras.layers.GRU(2) #I assume timesteps == samples in this case? 
-gru_layer_2 = keras.layers.GRU(128) 
-gru_layer_3 = keras.layers.GRU(256) 
-gru_layer_4 = keras.layers.GRU(512) 
-gru_layer_5 = keras.layers.GRU(256) 
-gru_layer_6 = keras.layers.GRU(128) 
-gru_layer_7 = keras.layers.GRU(1) 
+BiGRU_layer_1 = Bidirectional(GRU(2, 
+                                  kernel_initializer='glorot_normal', #"We use the Xavier normal initializer [34] for the kernel weights" #Question: Is this parameter the right one? Does kernel weights == kernel_initializer 
+                                  bias_initializer='zeros', #...with zero-initialized biases"
+                                  recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
+                                  return_sequences=True #?
+                                 ),
+                              merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
+                             #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
+                            #Maybe I'm mixing one thing for another here.
+                             ) #I assume timesteps == samples in this case? 
 
-model.add(gru_layer_1) 
-model.add(gru_layer_2) 
-model.add(gru_layer_3) 
-model.add(gru_layer_4) 
-model.add(gru_layer_5) 
-model.add(gru_layer_6) 
-model.add(gru_layer_7)
+BiGRU_layer_2 = Bidirectional(GRU(128, 
+                                  kernel_initializer='glorot_normal', #"We use the Xavier normal initializer [34] for the kernel weights" #Question: Is this parameter the right one? Does kernel weights == kernel_initializer 
+                                  bias_initializer='zeros', #...with zero-initialized biases"
+                                  recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
+                                  return_sequences=True #?
+                                 ),
+                              merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
+                             #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
+                            #Maybe I'm mixing one thing for another here.
+                             ) #I assume timesteps == samples in this case? 
 
-model.compile(loss='logcosh', optimizer='RMSprop', metrics=['accuracy']) #Something like this? Not sure if this is how they set it up and if metrics was set to 'accuracy'
 
+BiGRU_layer_3 = Bidirectional(GRU(256, 
+                                  kernel_initializer='glorot_normal', #"We use the Xavier normal initializer [34] for the kernel weights" #Question: Is this parameter the right one? Does kernel weights == kernel_initializer 
+                                  bias_initializer='zeros', #...with zero-initialized biases"
+                                  recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
+                                  return_sequences=True #?
+                                 ),
+                              merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
+                             #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
+                            #Maybe I'm mixing one thing for another here.
+                             ) #I assume timesteps == samples in this case? 
+
+BiGRU_layer_4 = Bidirectional(GRU(512, 
+                                  kernel_initializer='glorot_normal', #"We use the Xavier normal initializer [34] for the kernel weights" #Question: Is this parameter the right one? Does kernel weights == kernel_initializer 
+                                  bias_initializer='zeros', #...with zero-initialized biases"
+                                  recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
+                                  return_sequences=True #?
+                                 ),
+                              merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
+                             #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
+                            #Maybe I'm mixing one thing for another here.
+                             ) #I assume timesteps == samples in this case? 
+
+BiGRU_layer_5 = Bidirectional(GRU(256, 
+                                  kernel_initializer='glorot_normal', #"We use the Xavier normal initializer [34] for the kernel weights" #Question: Is this parameter the right one? Does kernel weights == kernel_initializer 
+                                  bias_initializer='zeros', #...with zero-initialized biases"
+                                  recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
+                                  return_sequences=True #?
+                                 ),
+                              merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
+                             #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
+                            #Maybe I'm mixing one thing for another here.
+                             ) #I assume timesteps == samples in this case? 
+
+BiGRU_layer_6 = Bidirectional(GRU(128, 
+                                  kernel_initializer='glorot_normal', #"We use the Xavier normal initializer [34] for the kernel weights" #Question: Is this parameter the right one? Does kernel weights == kernel_initializer 
+                                  bias_initializer='zeros', #...with zero-initialized biases"
+                                  recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
+                                  return_sequences=True #?
+                                 ),
+                              merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
+                             #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
+                            #Maybe I'm mixing one thing for another here.
+                             ) #I assume timesteps == samples in this case? 
+
+GRU_layer_7 = keras.layers.GRU(1) 
+
+
+model.add(BiGRU_layer_1)
+model.add(BiGRU_layer_2) 
+model.add(BiGRU_layer_3) 
+model.add(BiGRU_layer_4) 
+model.add(BiGRU_layer_5) 
+model.add(BiGRU_layer_6) 
+model.add(GRU_layer_7)
 #Wav file:
 #How does the model take in data? Does a WAV file have to be reformatted to something?
 #I know it's possible read wave files using scipy like so, but would the samples just be fed into the first layer?
