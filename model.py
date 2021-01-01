@@ -4,13 +4,14 @@
 #1. Learning rate: starting at 10^-4 (0.0001) and gradually decreasing to 10^-8 (0.00000001) during training. Is that done through a kind of 'learning rate schduling' on Keras?
 #2. Activation function: PReLU (but it isn't clear if this is applied for only certain layers with residual connections, or for all layers), from the diagram it seems to be added on at the end. Implementation in Keras: https://stackoverflow.com/a/34721948 - This blog talks about a time based learning rate schedule built in keras: https://machinelearningmastery.com/using-learning-rate-schedules-deep-learning-models-python-keras/
 #3. Residual connections between certain layers
-#4. Initializer: Xavier normal initializer ( "We use the Xavier normal initializer [34] for the kernel weights, with zero-initialized biases." Is this it: https://keras.io/api/layers/initializers/#glorotnormal-class ?) - Zero-initalizaed biases? Kernel weights? Is that different to weights?)
+#4. Initializer: Xavier normal initializer ✅ ( "We use the Xavier normal initializer [34] for the kernel weights, with zero-initialized biases." Is this it: https://keras.io/api/layers/initializers/#glorotnormal-class ?) - Zero-initalizaed biases? Kernel weights? Is that different to weights?)
 #   Maybe you can do this with something like: keras.layers.GRU(2, kernel_initializer='glorot_normal', bias_initializer='zeros') #BUT... is it applied to all layers? (I'm assuming yes)
-#5. Initializer of recurrent states: "The initializer for the recurrent states is a random orthogonal matrix [35], which helps the RNN stabilize by avoiding vanishing or exploding gradients. The stability occurs because the orthogonal matrix has an absolute eigenvalue of one, which avoids the gradients from exploding or vanishing due to repeated matrix multiplication." ... huh? Is this something I have to set on Keras? (random orthogonal matrix?)
+#5. Initializer of recurrent states: ✅ "The initializer for the recurrent states is a random orthogonal matrix [35], which helps the RNN stabilize by avoiding vanishing or exploding gradients. The stability occurs because the orthogonal matrix has an absolute eigenvalue of one, which avoids the gradients from exploding or vanishing due to repeated matrix multiplication." ... huh? Is this something I have to set on Keras? (random orthogonal matrix?)
 #   Key terms:
 #   'Recurrent state' what does that refer to, the GRU units?
 #   'Random orthogonal matrix' ... is there some parameter I need to set with this, how is this implemented?
-#6. Making GRU Layers Bi-directional 
+#6. Making GRU Layers Bi-directional ✅
+#7. Reshape GRU Layer outputs (1024 -> 512 -> 256 ... etc.): "The two pyramids of our hourglass architecture keep the number of trainable parameters within the memory constraints. The bottom pyramid decreases the number time steps while increasing the number of GRU units per layer, and the top pyramid does the reverse. This approach allows for deeper networks. We did not use upsampling techniques, such as linear interpolation, because the information can be lost. Instead, we reshape the RNN output to the desired fewer time steps. Reshaping the layer output to decrease and increase the time steps prevents losing data, and allows the RNN to have a sufficient size of units. "
 
 #Evaluation metrics (would those go as sort of custom functions where metrics=['accuracy'] is in Keras's model.compile? (as seen below):
 #1. Segmental signal-to-noise ratio (SSNR)  
@@ -36,7 +37,7 @@
 from tensorflow import keras 
 import keras 
 from keras import Sequential
-from keras.layers import Bidirectional, GRU
+from keras.layers import Bidirectional, GRU, Lambda, Reshape
 from keras.initializers import Orthogonal
 
 model = Sequential() #Is "Sequential" even right? Do I have to specify it's some kind of bi-directional RNN?
@@ -53,6 +54,8 @@ BiGRU_layer_1 = Bidirectional(GRU(2,
                              #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
                             #Maybe I'm mixing one thing for another here.
                              ) #I assume timesteps == samples in this case? 
+
+
 
 BiGRU_layer_2 = Bidirectional(GRU(128, 
                                   kernel_initializer='glorot_normal', #"We use the Xavier normal initializer [34] for the kernel weights" #Question: Is this parameter the right one? Does kernel weights == kernel_initializer 
@@ -120,6 +123,9 @@ GRU_layer_7 = keras.layers.GRU(1)
 
 
 model.add(BiGRU_layer_1)
+#model.add(Reshape((1024, 4))) This works but shape is 1024 for next layer
+#model.add(Reshape((1024, 4), input_shape=(512, 2))) This also works but shape is still 1024 for the next layer
+#model.add(Reshape((1024, 4), input_shape=(0.5, 512)))
 model.add(BiGRU_layer_2) 
 model.add(BiGRU_layer_3) 
 model.add(BiGRU_layer_4) 
