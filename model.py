@@ -45,8 +45,10 @@ BiGRU_layer_1 = Bidirectional(GRU(2,
                                   kernel_initializer='glorot_normal', #"We use the Xavier normal initializer [34] for the kernel weights" #Question: Is this parameter the right one? Does kernel weights == kernel_initializer 
                                   bias_initializer='zeros', #...with zero-initialized biases"
                                   recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
-                                  return_sequences=True #?
+                                  return_sequences=True#?
+                                  
                                  ),
+                              input_shape=(1024, 2), #Assuming first value == time steps in the paper
                               merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
                              #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
                             #Maybe I'm mixing one thing for another here.
@@ -58,6 +60,7 @@ BiGRU_layer_2 = Bidirectional(GRU(128,
                                   recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
                                   return_sequences=True #?
                                  ),
+                              input_shape=(512,256), #Assuming first value == time steps in the paper
                               merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
                              #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
                             #Maybe I'm mixing one thing for another here.
@@ -70,6 +73,7 @@ BiGRU_layer_3 = Bidirectional(GRU(256,
                                   recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
                                   return_sequences=True #?
                                  ),
+                              input_shape=(256,128), #Assuming first value == time steps in the paper
                               merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
                              #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
                             #Maybe I'm mixing one thing for another here.
@@ -81,6 +85,7 @@ BiGRU_layer_4 = Bidirectional(GRU(512,
                                   recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
                                   return_sequences=True #?
                                  ),
+                              input_shape=(128,256), #Assuming first value == time steps in the paper
                               merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
                              #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
                             #Maybe I'm mixing one thing for another here.
@@ -92,6 +97,8 @@ BiGRU_layer_5 = Bidirectional(GRU(256,
                                   recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
                                   return_sequences=True #?
                                  ),
+                              
+                              input_shape=(256,512), #Assuming first value == time steps in the paper
                               merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
                              #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
                             #Maybe I'm mixing one thing for another here.
@@ -103,6 +110,7 @@ BiGRU_layer_6 = Bidirectional(GRU(128,
                                   recurrent_initializer=Orthogonal(gain=1.0, seed=None), # "The initializer for the recurrent states is a random orthogonal matrix" #Going to assume this is the 'initializer for the recurrent state'
                                   return_sequences=True #?
                                  ),
+                              input_shape=(512,1024), #Assuming first value == time steps in the paper
                               merge_mode='concat'#"The stacked bidirectional RNNs share their hidden states, so that the hidden state (ℎ𝑡 𝑙) of a bi-GRU unit in layer l at time t is obtained by concatenating its forward (ℎ𝑡 ⃗⃗⃗ 𝑙 ) and backward (ℎ𝑡⃖⃗⃗𝑙⃗ ) hidden states, which depend on the lower layer l–1 at time t and this layer at time t–1"
                              #Keras Documentation: merge_mode: Mode by which outputs of the forward and backward RNNs will be combined.
                             #Maybe I'm mixing one thing for another here.
